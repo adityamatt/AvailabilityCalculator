@@ -6,11 +6,13 @@ export class SystemDesign {
   availability: number
   children: Array<SystemDesign>
   iconName?: string
+  isImportant: boolean
 
   constructor() {
     this.componentName = 'Root'
     this.availability = 100
     this.children = []
+    this.isImportant = true
   }
 
   toJson = () => {
