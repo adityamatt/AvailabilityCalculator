@@ -1,1 +1,2 @@
 export const TEST_ACTION = 'TEST_ACTION'
+export const UPDATE_ICON_SIZE = 'UPDATE_ICON_SIZE'

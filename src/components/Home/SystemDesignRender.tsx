@@ -8,7 +8,6 @@ interface ISystemDesignRender {
   design: SystemDesign
 }
 export const SystemDesignRender = (props: ISystemDesignRender) => {
-  console.log(props.design.renderIcon(), props.design)
   return (
     <Stack>
       <Stack.Item align="center">

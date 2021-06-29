@@ -7,11 +7,18 @@ interface ISingleSystemIcon {
 }
 
 export const SingleSystemIcon = (props: ISingleSystemIcon) => {
-  const borderStyles: IStyle = { borderWidth: 3, borderStyle: 'solid', borderRadius: 10, padding: 3 }
+  const borderStyles: IStyle = {
+    borderWidth: 1,
+    borderStyle: props.design.isImportant ? 'solid' : 'dashed',
+    borderRadius: 10,
+    padding: 3,
+  }
 
   return (
     <Stack styles={{ root: { width: 'fit-content' } }}>
-      <Stack.Item styles={props.design ? { root: borderStyles } : {}}>{props.design.renderIcon()}</Stack.Item>
+      <Stack.Item styles={{ root: borderStyles }} align="center">
+        {props.design.renderIcon()}
+      </Stack.Item>
       <Stack.Item align="center">
         <Label>{`${props.design.componentName}`}</Label>
       </Stack.Item>

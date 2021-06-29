@@ -1,5 +1,7 @@
 import { APIManagement } from 'azure-react-icons'
 import React from 'react'
+import { useSelector } from 'react-redux'
+import { getIconSize } from '../../store/selectors/systemSelector'
 
 export class SystemDesign {
   componentName: string
@@ -27,7 +29,9 @@ export class SystemDesign {
   }
 
   renderIcon = () => {
+    const iconSize = useSelector(getIconSize)
     //TODO
-    return <APIManagement size={'128'} className="SystemIcon" />
+
+    return <APIManagement size={`${iconSize}`} className="SystemIcon" />
   }
 }
