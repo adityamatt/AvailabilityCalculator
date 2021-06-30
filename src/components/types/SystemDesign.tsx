@@ -10,12 +10,14 @@ export class SystemDesign {
   children: Array<SystemDesign>
   iconName?: string
   isImportant: boolean
+  instance: number
 
-  constructor(name?: string, avail?: number, isImportant?: boolean) {
+  constructor(name?: string, avail?: number, isImportant?: boolean, instance?: number) {
     this.componentName = name ? name : 'Root'
     this.availability = avail ? avail : 100
     this.children = []
     this.isImportant = isImportant !== undefined ? isImportant : true
+    this.instance = instance ? instance : 2
   }
 
   toJson = () => {
@@ -44,5 +46,18 @@ export class SystemDesign {
   }
   clone = (): SystemDesign => {
     return deepClone(this)
+  }
+
+  getAvailability = (): number => {
+    const instanceAvail = (1 - Math.pow(1 - this.availability / 100, this.instance)) * Math.pow(100, this.instance - 1)
+
+    if (this.children.length === 0) return instanceAvail
+    const importantChildrenAvailability: number[] = this.children
+      .filter((_item) => _item.isImportant)
+      .map((_item) => _item.getAvailability())
+
+    if (importantChildrenAvailability.length === 0) return instanceAvail
+    const minBlocker = Math.min.apply(Math, [...importantChildrenAvailability])
+    return (instanceAvail * minBlocker) / 100
   }
 }

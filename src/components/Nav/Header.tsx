@@ -32,7 +32,7 @@ export const Header = (props: IHeader) => {
         Availability Calculator
       </div>
       <div className="rightFloat">
-        <h4 className="welcomeText">
+        {/* <h4 className="welcomeText">
           {inProgress !== 'none' && (
             <div>
               <Spinner size={SpinnerSize.medium} className="spinner" label="Loading" />
@@ -61,7 +61,7 @@ export const Header = (props: IHeader) => {
               </DefaultButton>
             </div>
           )}
-        </h4>
+        </h4> */}
       </div>
     </div>
   )

@@ -5,7 +5,7 @@ import { Route, HashRouter, Redirect } from 'react-router-dom'
 import { Stack, ThemeProvider } from '@fluentui/react'
 import Header from '../components/Nav/Header'
 import Home from '../components/Home/Home'
-import About from '../components/About/About'
+import View from '../components/View/View'
 import Footer from '../components/Footer/Footer'
 import { initializeIcons } from '@fluentui/font-icons-mdl2'
 
@@ -23,8 +23,8 @@ export const App = (props: any) => {
               <Route key="homeKey" exact path="/">
                 <Home />
               </Route>
-              <Route key="aboutKey" exact path="/about">
-                <About loggedIn={true} />
+              <Route key="viewKey" exact path="/View">
+                <View />
               </Route>
             </Stack.Item>
             <Stack.Item className="sidebar">
