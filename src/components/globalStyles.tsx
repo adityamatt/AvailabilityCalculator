@@ -3,3 +3,5 @@ export const globalStackTokensSmall = { childrenGap: 5 }
 
 export const globalStackTokensMedium = { childrenGap: 10 }
 export const globalStackTokensLarge = { childrenGap: 20 }
+
+export const justifySpace = { root: { justifyContent: 'space-between' } }

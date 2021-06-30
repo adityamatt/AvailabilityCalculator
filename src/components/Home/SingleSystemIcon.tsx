@@ -5,6 +5,7 @@ import { globalStackTokensXsmall } from '../globalStyles'
 import { updateTraversePath } from '../../store/actions/systemActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { getTraversePath } from '../../store/selectors/systemSelector'
+import { AddChildModal } from './AddChildModal'
 
 interface ISingleSystemIcon {
   design: SystemDesign
@@ -17,6 +18,8 @@ const getNewTraversePath = (existingPath: string[], newPath: string): string[] =
 }
 
 export const SingleSystemIcon = (props: ISingleSystemIcon) => {
+  const [isAddModalOpen, setIsAddModalOpen] = React.useState<boolean>(false)
+
   const traversePath = useSelector(getTraversePath)
 
   const dispatch = useDispatch()
@@ -33,13 +36,18 @@ export const SingleSystemIcon = (props: ISingleSystemIcon) => {
       </Stack.Item>
 
       <Stack.Item align="center">
-        <Label>{`${props.design.availability}%`}</Label>
+        <Label>{`${props.design.getAvailability()}%`}</Label>
       </Stack.Item>
       <Stack.Item align="center" styles={{ root: { justifyContent: 'space-between' } }} grow>
         <Stack horizontal tokens={globalStackTokensXsmall} grow>
           {!props.isChild && (
             <Stack.Item>
-              <IconButton iconProps={{ iconName: 'Add' }} />
+              <IconButton
+                iconProps={{ iconName: 'Add' }}
+                onClick={() => {
+                  setIsAddModalOpen(true)
+                }}
+              />
             </Stack.Item>
           )}
           <Stack.Item align="center">
@@ -60,6 +68,14 @@ export const SingleSystemIcon = (props: ISingleSystemIcon) => {
             </Stack.Item>
           )}
         </Stack>
+      </Stack.Item>
+      <Stack.Item>
+        <AddChildModal
+          isOpen={isAddModalOpen}
+          close={() => {
+            setIsAddModalOpen(false)
+          }}
+        />
       </Stack.Item>
     </Stack>
   )

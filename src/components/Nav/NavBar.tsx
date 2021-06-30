@@ -1,8 +1,5 @@
 import * as React from 'react'
-import { Button, Container } from '@material-ui/core'
-import { useDispatch, useSelector } from 'react-redux'
-import { INavLink, INavLinkGroup, INavStyles, Nav } from '@fluentui/react'
-import { useHistory } from 'react-router'
+import { INavLink, INavStyles, Nav } from '@fluentui/react'
 
 interface INavBar {}
 function _onLinkClick(ev?: React.MouseEvent<HTMLElement>, item?: INavLink) {

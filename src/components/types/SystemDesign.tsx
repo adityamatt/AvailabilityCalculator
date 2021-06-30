@@ -1,4 +1,4 @@
-import { APIManagement } from 'azure-react-icons'
+import { AzAppServiceWebApp } from 'azure-react-icons'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { getIconSize } from '../../store/selectors/systemSelector'
@@ -31,7 +31,7 @@ export class SystemDesign {
     const iconSize = useSelector(getIconSize)
     //TODO
 
-    return <APIManagement size={`${iconSize}`} className="SystemIcon" />
+    return <AzAppServiceWebApp size={`${iconSize}`} className="SystemIcon" />
   }
   addChild = (item: SystemDesign) => {
     if (this.children.find((_item) => _item.componentName.toLowerCase() === _item.componentName.toLowerCase())) {
@@ -59,5 +59,16 @@ export class SystemDesign {
     if (importantChildrenAvailability.length === 0) return instanceAvail
     const minBlocker = Math.min.apply(Math, [...importantChildrenAvailability])
     return (instanceAvail * minBlocker) / 100
+  }
+  isNameUnique = (name: string): boolean => {
+    if (this.componentName.toLocaleLowerCase() === name.toLocaleLowerCase()) return false
+    let i = 0
+    while (i < this.children.length) {
+      const childMatch = this.children[i].isNameUnique(name)
+      if (!childMatch) return false
+      i += 1
+    }
+
+    return true
   }
 }

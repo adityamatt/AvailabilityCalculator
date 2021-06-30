@@ -1,10 +1,8 @@
 import { SystemDesign } from '../types/SystemDesign'
 import React from 'react'
-import { Stack, IconButton, IStyle } from '@fluentui/react'
-import { APIManagement } from 'azure-react-icons'
+import { Stack, Text } from '@fluentui/react'
 import { SingleSystemIcon } from './SingleSystemIcon'
 import { SystemChildren } from './SystemChildrens'
-import { globalStackTokensLarge } from '../globalStyles'
 import { useSelector } from 'react-redux'
 import { getTraversePath } from '../../store/selectors/systemSelector'
 
@@ -26,23 +24,20 @@ const findSystemToRender = (path: string[], root: SystemDesign): SystemDesign =>
 export const SystemDesignRender = (props: ISystemDesignRender) => {
   const traversePath = useSelector(getTraversePath)
 
-  const containerStyle: IStyle = {
-    padding: 2,
-    width: '100%',
-    height: '100%',
-  }
-
   let designToRender = props.design
   try {
     designToRender = findSystemToRender(traversePath, props.design)
   } catch (err) {}
 
   return (
-    <Stack tokens={globalStackTokensLarge} verticalFill grow>
+    <Stack tokens={{ childrenGap: 30 }} verticalFill grow>
       <Stack.Item align="center">
         <SingleSystemIcon design={designToRender} />
       </Stack.Item>
       <Stack.Item align="center">
+        <Text variant="large">Dependencies</Text>
+      </Stack.Item>
+      <Stack.Item>
         <SystemChildren childrenSystemDesign={designToRender.children} />
       </Stack.Item>
     </Stack>
