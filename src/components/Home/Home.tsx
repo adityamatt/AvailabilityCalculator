@@ -13,8 +13,9 @@ import { SystemDesign } from '../types/SystemDesign'
 import { globalStackTokensXsmall, globalStackTokensMedium, globalStackTokensSmall } from '../globalStyles'
 import { SystemDesignRender } from './SystemDesignRender'
 import { useDispatch, useSelector } from 'react-redux'
-import { getIconSize } from '../../store/selectors/systemSelector'
+import { getIconSize, getSystem, getTraversePath } from '../../store/selectors/systemSelector'
 import { updateIconSize } from '../../store/actions/systemActions'
+import { TraversePathHeader } from './TraversePathHeader'
 
 interface IHome {}
 
@@ -50,8 +51,10 @@ const iconSizeOptions: IDropdownOption[] = [
 ]
 
 export const Home = (props: IHome) => {
-  const [system, setSystem] = React.useState<SystemDesign>(new SystemDesign())
+  const system = useSelector(getSystem)
+
   const iconSize = useSelector(getIconSize)
+  const traversePath = useSelector(getTraversePath)
   const dispatch = useDispatch()
 
   return (
@@ -61,7 +64,7 @@ export const Home = (props: IHome) => {
           <Stack.Item>
             <PrimaryButton
               onClick={() => {
-                setSystem(new SystemDesign())
+                //TODO
               }}
               text="Reset"
             />
@@ -70,7 +73,7 @@ export const Home = (props: IHome) => {
             <PrimaryButton
               iconProps={{ iconName: 'Download' }}
               onClick={() => {
-                setSystem(new SystemDesign())
+                //TODO
               }}
               text="Download"
             />
@@ -93,6 +96,9 @@ export const Home = (props: IHome) => {
                 />
               </Stack.Item>
             </Stack>
+          </Stack.Item>
+          <Stack.Item>
+            <TraversePathHeader traversePath={traversePath} />
           </Stack.Item>
         </Stack>
       </Stack.Item>

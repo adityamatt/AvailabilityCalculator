@@ -1,6 +1,9 @@
-import { FontIcon } from "@fluentui/react"
-import React from 'react'
+import { v4 as uuidv4 } from 'uuid'
+import _ from 'lodash'
+export const getRandomGuid = (): string => {
+  return uuidv4()
+}
 
-export const iconRenderer = (path : string):JSX.Element => {
-    return <FontIcon iconName="Copy"/>
+export function deepClone<T>(obj: T): T {
+  return _.cloneDeep<T>(obj)
 }

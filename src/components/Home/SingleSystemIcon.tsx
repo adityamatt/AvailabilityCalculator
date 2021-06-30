@@ -1,6 +1,7 @@
 import { SystemDesign } from '../types/SystemDesign'
 import React from 'react'
-import { Stack, Label, IStyle } from '@fluentui/react'
+import { Stack, Label, IStyle, PrimaryButton } from '@fluentui/react'
+import { globalStackTokensXsmall } from '../globalStyles'
 
 interface ISingleSystemIcon {
   design: SystemDesign
@@ -23,7 +24,17 @@ export const SingleSystemIcon = (props: ISingleSystemIcon) => {
         <Label>{`${props.design.componentName}`}</Label>
       </Stack.Item>
       <Stack.Item align="center">
-        <Label>{`Component Availalbility: ${props.design.availability}%`}</Label>
+        <Label>{`${props.design.availability}%`}</Label>
+      </Stack.Item>
+      <Stack.Item align="center">
+        <Stack horizontal tokens={globalStackTokensXsmall}>
+          <Stack.Item>
+            <PrimaryButton text={'Add dependecy'} />
+          </Stack.Item>
+          <Stack.Item>
+            <PrimaryButton text={'Remove dependecy'} />
+          </Stack.Item>
+        </Stack>
       </Stack.Item>
     </Stack>
   )
