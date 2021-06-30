@@ -104,7 +104,7 @@ export const Home = (props: IHome) => {
       </Stack.Item>
       <Stack.Item styles={{ root: { position: 'relative' } }} grow verticalFill>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-          <SystemDesignRender design={system} />
+          <SystemDesignRender design={system} traversePath={traversePath} />
         </ScrollablePane>
       </Stack.Item>
     </Stack>

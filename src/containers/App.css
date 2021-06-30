@@ -36,7 +36,7 @@ component as rows.
 
 .content {
   padding: 10px;
-  height: 80vh;
+  height: 85vh;
   width: 100%;
   overflow-y: auto;
 }
@@ -63,11 +63,11 @@ Lastly we give some custom height to our
 header and footer components.
 */
 .App > .header {
-  height: 10vh;
+  height: 6vh;
   display: block;
 }
 .App .footer {
-  height: 6vh;
+  height: 5vh;
   background-color: #141127;
   color: white;
 }

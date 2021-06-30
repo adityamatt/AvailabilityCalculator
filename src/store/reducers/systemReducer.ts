@@ -1,5 +1,5 @@
 import { SystemDesign } from '../../components/types/SystemDesign'
-import { UPDATE_ICON_SIZE } from '../actions/actionTypes'
+import { UPDATE_ICON_SIZE, UPDATE_TRAVERSE_PATH } from '../actions/actionTypes'
 
 export interface ReduxSystemState {
   iconsize: number
@@ -10,7 +10,7 @@ export interface ReduxSystemState {
 const defaultSystemState: ReduxSystemState = {
   iconsize: 24,
   system: new SystemDesign(),
-  traversePath: [new SystemDesign().componentName],
+  traversePath: [new SystemDesign().componentName, 't1'],
 }
 defaultSystemState.system.addChild(new SystemDesign('t1', 95, false))
 defaultSystemState.system.addChild(new SystemDesign('t2', 96, true))
@@ -29,6 +29,11 @@ export default function systemReducer(state: ReduxSystemState = defaultSystemSta
       return {
         ...state,
         iconsize: action.payload,
+      }
+    case UPDATE_TRAVERSE_PATH:
+      return {
+        ...state,
+        traversePath: action.payload,
       }
     default:
       return state
