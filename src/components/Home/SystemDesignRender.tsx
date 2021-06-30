@@ -5,10 +5,11 @@ import { APIManagement } from 'azure-react-icons'
 import { SingleSystemIcon } from './SingleSystemIcon'
 import { SystemChildren } from './SystemChildrens'
 import { globalStackTokensLarge } from '../globalStyles'
+import { useSelector } from 'react-redux'
+import { getTraversePath } from '../../store/selectors/systemSelector'
 
 interface ISystemDesignRender {
   design: SystemDesign
-  traversePath: string[]
 }
 const findSystemToRender = (path: string[], root: SystemDesign): SystemDesign => {
   if (path.length < 1) throw Error('Invalid system design architecture')
@@ -23,6 +24,8 @@ const findSystemToRender = (path: string[], root: SystemDesign): SystemDesign =>
 }
 
 export const SystemDesignRender = (props: ISystemDesignRender) => {
+  const traversePath = useSelector(getTraversePath)
+
   const containerStyle: IStyle = {
     padding: 2,
     width: '100%',
@@ -31,7 +34,7 @@ export const SystemDesignRender = (props: ISystemDesignRender) => {
 
   let designToRender = props.design
   try {
-    designToRender = findSystemToRender(props.traversePath, props.design)
+    designToRender = findSystemToRender(traversePath, props.design)
   } catch (err) {}
 
   return (

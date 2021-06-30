@@ -54,7 +54,7 @@ export const Home = (props: IHome) => {
   const system = useSelector(getSystem)
 
   const iconSize = useSelector(getIconSize)
-  const traversePath = useSelector(getTraversePath)
+
   const dispatch = useDispatch()
 
   return (
@@ -98,13 +98,13 @@ export const Home = (props: IHome) => {
             </Stack>
           </Stack.Item>
           <Stack.Item>
-            <TraversePathHeader traversePath={traversePath} />
+            <TraversePathHeader />
           </Stack.Item>
         </Stack>
       </Stack.Item>
       <Stack.Item styles={{ root: { position: 'relative' } }} grow verticalFill>
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-          <SystemDesignRender design={system} traversePath={traversePath} />
+          <SystemDesignRender design={system} />
         </ScrollablePane>
       </Stack.Item>
     </Stack>

@@ -15,7 +15,7 @@ export const SystemChildren = (props: ISystemChildren) => {
       {props.childrenSystemDesign.map((item: SystemDesign) => {
         return (
           <Stack.Item key={getRandomGuid()}>
-            <SingleSystemIcon design={item} />
+            <SingleSystemIcon design={item} isChild={true} />
           </Stack.Item>
         )
       })}

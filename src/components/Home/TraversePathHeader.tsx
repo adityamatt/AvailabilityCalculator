@@ -1,43 +1,50 @@
 import React from 'react'
 import { Stack, Text, Link } from '@fluentui/react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { updateTraversePath } from '../../store/actions/systemActions'
+import { getTraversePath } from '../../store/selectors/systemSelector'
+import { globalStackTokensSmall } from '../globalStyles'
 
-interface ITraversePathHeader {
-  traversePath: string[]
-}
+interface ITraversePathHeader {}
 export const TraversePathHeader = (props: ITraversePathHeader) => {
   const dispatch = useDispatch()
 
+  const traversePath = useSelector(getTraversePath)
+
   const isLast = (path: string): boolean => {
-    return path === props.traversePath[props.traversePath.length - 1]
+    return path === traversePath[traversePath.length - 1]
   }
   const getNewTraversePath = (path: string): string[] => {
     let i = 0
     const output: string[] = []
-    while (i < props.traversePath.length && props.traversePath[i] !== path) {
-      output.push(props.traversePath[i])
+    while (i < traversePath.length && traversePath[i] !== path) {
+      output.push(traversePath[i])
       i += 1
     }
-    output.push(props.traversePath[i])
+    output.push(traversePath[i])
 
     return output
   }
 
   return (
-    <Stack horizontal verticalAlign="center">
-      {props.traversePath.map((_path: string) => {
+    <Stack horizontal verticalAlign="center" tokens={globalStackTokensSmall}>
+      {traversePath.map((_path: string) => {
         return (
           <Text key={_path}>
-            <Link
-              disabled={isLast(_path)}
-              onClick={() => {
-                dispatch(updateTraversePath(getNewTraversePath(_path)))
-              }}
-            >
-              {`${_path}`}
-              {!isLast(_path) && `${'->'}`}
-            </Link>
+            <Stack tokens={globalStackTokensSmall} horizontal>
+              <Stack.Item>
+                <Link
+                  underline
+                  disabled={isLast(_path)}
+                  onClick={() => {
+                    dispatch(updateTraversePath(getNewTraversePath(_path)))
+                  }}
+                >
+                  {`${_path}`}
+                </Link>
+              </Stack.Item>
+              <Stack.Item>{!isLast(_path) && `${'->'}`}</Stack.Item>
+            </Stack>
           </Text>
         )
       })}
