@@ -16,7 +16,7 @@ import { globalStackTokensXsmall, globalStackTokensMedium, globalStackTokensSmal
 import { SystemDesignRender } from './SystemDesignRender'
 import { useDispatch, useSelector } from 'react-redux'
 import { getIconSize, getSystem, getSystemError, getTraversePath } from '../../store/selectors/systemSelector'
-import { resetError, updateIconSize } from '../../store/actions/systemActions'
+import { resetError, resetSystem, updateIconSize } from '../../store/actions/systemActions'
 import { TraversePathHeader } from './TraversePathHeader'
 
 interface IHome {}
@@ -77,7 +77,7 @@ export const Home = (props: IHome) => {
           <Stack.Item>
             <PrimaryButton
               onClick={() => {
-                //TODO
+                dispatch(resetSystem())
               }}
               text="Reset"
             />

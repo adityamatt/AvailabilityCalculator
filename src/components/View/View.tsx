@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from 'react'
-import { DefaultButton, Stack } from '@fluentui/react'
+import React from 'react'
+import { Text, Stack } from '@fluentui/react'
 import Tree from 'react-d3-tree'
 import { CustomNodeElementProps, RawNodeDatum } from 'react-d3-tree/lib/types/common'
 import { globalStackTokensXsmall } from '../globalStyles'
@@ -31,7 +31,9 @@ export const View = (props: IView) => {
   const orgChart: RawNodeDatum = convertToTree(system)
   return (
     <Stack tokens={globalStackTokensXsmall} grow verticalFill verticalAlign="center" horizontalAlign="center">
-      <Stack.Item>Title</Stack.Item>
+      <Stack.Item>
+        <Text variant="xLarge">System Architecture</Text>
+      </Stack.Item>
       <Stack.Item
         grow
         verticalFill

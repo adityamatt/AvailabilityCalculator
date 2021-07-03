@@ -1,5 +1,12 @@
 import { SystemDesign } from '../../components/types/SystemDesign'
-import { ADD_DESIGN_CHILD, RESET_SYSTEM_ERROR, UPDATE_ICON_SIZE, UPDATE_TRAVERSE_PATH } from '../actions/actionTypes'
+import {
+  ADD_DESIGN_CHILD,
+  REMOVE_DESIGN_CHILDREN,
+  RESET_SYSTEM_ERROR,
+  REST_SYSTEM,
+  UPDATE_ICON_SIZE,
+  UPDATE_TRAVERSE_PATH,
+} from '../actions/actionTypes'
 
 export interface ReduxSystemState {
   iconsize: number
@@ -43,12 +50,39 @@ export default function systemReducer(state: ReduxSystemState = defaultSystemSta
         error: '',
       }
     case ADD_DESIGN_CHILD:
-      let newSystem = state.system.clone()
-      newSystem = newSystem.addChild(action.design, action.path)
-      return {
-        ...state,
-        system: newSystem,
+      try {
+        let addNewSystem = state.system.clone()
+        addNewSystem = addNewSystem.addChild(action.design, action.path)
+        return {
+          ...state,
+          system: addNewSystem,
+        }
+      } catch (err) {
+        return {
+          ...state,
+          error: err.toString(),
+        }
       }
+
+    case REST_SYSTEM:
+      return {
+        ...defaultSystemState,
+      }
+    case REMOVE_DESIGN_CHILDREN:
+      try {
+        const removeNewSystem = state.system.clone()
+        removeNewSystem.removeChild(action.removeNames, action.path)
+        return {
+          ...state,
+          system: removeNewSystem,
+        }
+      } catch (err) {
+        return {
+          ...state,
+          error: err.toString(),
+        }
+      }
+
     default:
       return state
   }

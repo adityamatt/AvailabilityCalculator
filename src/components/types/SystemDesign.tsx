@@ -35,7 +35,7 @@ export class SystemDesign {
   }
   addChild = (item: SystemDesign, path: string[]): SystemDesign => {
     if (path.length < 1) throw Error('Invalid system design architecture')
-    if (path.length == 1 && path[0].toLowerCase() == this.componentName.toLowerCase()) {
+    if (path.length == 1 && path[0].toLowerCase() === this.componentName.toLowerCase()) {
       const output = this.clone()
       output.children.push(item)
       return output
@@ -48,10 +48,21 @@ export class SystemDesign {
 
     return this
   }
-  removeChild = (item: SystemDesign) => {
-    this.children = this.children.filter((_item) => {
-      return _item.componentName.toLowerCase() !== item.componentName.toLowerCase()
-    })
+  removeChild = (removeNames: string[], path: string[]) => {
+    console.log(removeNames, path, this.componentName)
+    if (path.length < 1) throw Error('Invalid system design architecture')
+    if (path.length == 1 && path[0].toLowerCase() === this.componentName.toLowerCase()) {
+      this.children = this.children.filter((valid) => {
+        return removeNames.find((_exists) => _exists.toLowerCase() === valid.componentName.toLowerCase()) === undefined
+      })
+
+      return
+    }
+    if (path[0] !== this.componentName) throw Error('Invalid Traversal')
+    const childIndex = this.children.findIndex((component) => component.componentName === path[1])
+
+    if (childIndex == -1) throw Error('Invalid traversal')
+    this.children[childIndex].removeChild(removeNames, path.slice(1))
   }
   clone = (): SystemDesign => {
     const output = new SystemDesign()

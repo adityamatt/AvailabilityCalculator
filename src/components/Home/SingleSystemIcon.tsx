@@ -2,10 +2,11 @@ import { SystemDesign } from '../types/SystemDesign'
 import React from 'react'
 import { Stack, Label, IStyle, PrimaryButton, IconButton, Link } from '@fluentui/react'
 import { globalStackTokensXsmall } from '../globalStyles'
-import { addDesignChild, updateTraversePath } from '../../store/actions/systemActions'
+import { addDesignChild, removeDesignChildren, updateTraversePath } from '../../store/actions/systemActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { getTraversePath } from '../../store/selectors/systemSelector'
 import { AddChildModal } from './AddChildModal'
+import { RemoveChildModal } from './RemoveChildModal'
 
 interface ISingleSystemIcon {
   design: SystemDesign
@@ -19,6 +20,7 @@ const getNewTraversePath = (existingPath: string[], newPath: string): string[] =
 
 export const SingleSystemIcon = (props: ISingleSystemIcon) => {
   const [isAddModalOpen, setIsAddModalOpen] = React.useState<boolean>(false)
+  const [isRemoveModalOpen, setIsRemoveModalOpen] = React.useState<boolean>(false)
 
   const traversePath = useSelector(getTraversePath)
 
@@ -56,7 +58,6 @@ export const SingleSystemIcon = (props: ISingleSystemIcon) => {
                 underline
                 disabled={!props.isChild}
                 onClick={() => {
-                  //TODO
                   dispatch(updateTraversePath(getNewTraversePath(traversePath, props.design.componentName)))
                 }}
               >{`${props.design.componentName}`}</Link>
@@ -64,7 +65,13 @@ export const SingleSystemIcon = (props: ISingleSystemIcon) => {
           </Stack.Item>
           {!props.isChild && (
             <Stack.Item>
-              <IconButton iconProps={{ iconName: 'Remove' }} />
+              <IconButton
+                disabled={props.design.children.length === 0}
+                iconProps={{ iconName: 'Remove' }}
+                onClick={() => {
+                  setIsRemoveModalOpen(true)
+                }}
+              />
             </Stack.Item>
           )}
         </Stack>
@@ -79,6 +86,20 @@ export const SingleSystemIcon = (props: ISingleSystemIcon) => {
             isOpen={isAddModalOpen}
             close={() => {
               setIsAddModalOpen(false)
+            }}
+          />
+        )}
+      </Stack.Item>
+      <Stack.Item>
+        {isRemoveModalOpen && (
+          <RemoveChildModal
+            parentSystem={props.design}
+            onRemove={(removeNames: string[]) => {
+              dispatch(removeDesignChildren(removeNames, traversePath))
+            }}
+            isOpen={isRemoveModalOpen}
+            close={() => {
+              setIsRemoveModalOpen(false)
             }}
           />
         )}
