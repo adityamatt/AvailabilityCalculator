@@ -8,13 +8,15 @@ import {
   Dropdown,
   IDropdownOption,
   Label,
+  MessageBar,
+  MessageBarType,
 } from '@fluentui/react'
 import { SystemDesign } from '../types/SystemDesign'
 import { globalStackTokensXsmall, globalStackTokensMedium, globalStackTokensSmall } from '../globalStyles'
 import { SystemDesignRender } from './SystemDesignRender'
 import { useDispatch, useSelector } from 'react-redux'
-import { getIconSize, getSystem, getTraversePath } from '../../store/selectors/systemSelector'
-import { updateIconSize } from '../../store/actions/systemActions'
+import { getIconSize, getSystem, getSystemError, getTraversePath } from '../../store/selectors/systemSelector'
+import { resetError, updateIconSize } from '../../store/actions/systemActions'
 import { TraversePathHeader } from './TraversePathHeader'
 
 interface IHome {}
@@ -51,15 +53,26 @@ const iconSizeOptions: IDropdownOption[] = [
 ]
 
 export const Home = (props: IHome) => {
-  const system = useSelector(getSystem)
-
   const iconSize = useSelector(getIconSize)
+  const error = useSelector(getSystemError)
 
   const dispatch = useDispatch()
 
   return (
     <Stack tokens={globalStackTokensXsmall} grow verticalFill>
-      <Stack.Item>
+      <Stack.Item id="ERROR MESSAGE">
+        {error && (
+          <MessageBar
+            messageBarType={MessageBarType.error}
+            onDismiss={() => {
+              dispatch(resetError())
+            }}
+          >
+            {error}
+          </MessageBar>
+        )}
+      </Stack.Item>
+      <Stack.Item id="Actions">
         <Stack tokens={globalStackTokensMedium} horizontal verticalAlign="end">
           <Stack.Item>
             <PrimaryButton
@@ -102,9 +115,9 @@ export const Home = (props: IHome) => {
           </Stack.Item>
         </Stack>
       </Stack.Item>
-      <Stack.Item styles={{ root: { position: 'relative' } }} grow verticalFill>
+      <Stack.Item styles={{ root: { position: 'relative' } }} grow verticalFill id="Design">
         <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
-          <SystemDesignRender design={system} />
+          <SystemDesignRender />
         </ScrollablePane>
       </Stack.Item>
     </Stack>

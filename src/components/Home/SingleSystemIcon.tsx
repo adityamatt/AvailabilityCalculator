@@ -2,7 +2,7 @@ import { SystemDesign } from '../types/SystemDesign'
 import React from 'react'
 import { Stack, Label, IStyle, PrimaryButton, IconButton, Link } from '@fluentui/react'
 import { globalStackTokensXsmall } from '../globalStyles'
-import { updateTraversePath } from '../../store/actions/systemActions'
+import { addDesignChild, updateTraversePath } from '../../store/actions/systemActions'
 import { useDispatch, useSelector } from 'react-redux'
 import { getTraversePath } from '../../store/selectors/systemSelector'
 import { AddChildModal } from './AddChildModal'
@@ -70,15 +70,18 @@ export const SingleSystemIcon = (props: ISingleSystemIcon) => {
         </Stack>
       </Stack.Item>
       <Stack.Item>
-        <AddChildModal
-          onAdd={(design: SystemDesign) => {
-            //TODO
-          }}
-          isOpen={isAddModalOpen}
-          close={() => {
-            setIsAddModalOpen(false)
-          }}
-        />
+        {isAddModalOpen && (
+          <AddChildModal
+            onAdd={(design: SystemDesign) => {
+              //TODO
+              dispatch(addDesignChild(design, traversePath))
+            }}
+            isOpen={isAddModalOpen}
+            close={() => {
+              setIsAddModalOpen(false)
+            }}
+          />
+        )}
       </Stack.Item>
     </Stack>
   )

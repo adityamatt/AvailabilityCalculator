@@ -13,7 +13,7 @@ export class SystemDesign {
   instance: number
 
   constructor(name?: string, avail?: number, isImportant?: boolean, instance?: number) {
-    this.componentName = name ? name : 'Root'
+    this.componentName = name ? name : 'root'
     this.availability = avail ? avail : 100
     this.children = []
     this.isImportant = isImportant !== undefined ? isImportant : true
@@ -33,11 +33,20 @@ export class SystemDesign {
 
     return <AzAppServiceWebApp size={`${iconSize}`} className="SystemIcon" />
   }
-  addChild = (item: SystemDesign) => {
-    if (this.children.find((_item) => _item.componentName.toLowerCase() === _item.componentName.toLowerCase())) {
-      // throw Error('Existing Child with same name exists')
+  addChild = (item: SystemDesign, path: string[]): SystemDesign => {
+    if (path.length < 1) throw Error('Invalid system design architecture')
+    if (path.length == 1 && path[0].toLowerCase() == this.componentName.toLowerCase()) {
+      const output = this.clone()
+      output.children.push(item)
+      return output
     }
-    this.children.push(item)
+    if (path[0] !== this.componentName) throw Error('Invalid Traversal')
+    const childIndex = this.children.findIndex((component) => component.componentName === path[1])
+
+    if (childIndex == -1) throw Error('Invalid traversal')
+    this.children[childIndex] = this.children[childIndex].addChild(item, path.slice(1))
+
+    return this
   }
   removeChild = (item: SystemDesign) => {
     this.children = this.children.filter((_item) => {
@@ -45,11 +54,19 @@ export class SystemDesign {
     })
   }
   clone = (): SystemDesign => {
-    return deepClone(this)
+    const output = new SystemDesign()
+    output.componentName = this.componentName
+    output.availability = this.availability
+    output.iconName = this.iconName
+    output.isImportant = this.isImportant
+    output.instance = this.instance
+    output.children = this.children.map((_itm) => _itm.clone())
+
+    return output
   }
 
   getAvailability = (): number => {
-    const instanceAvail = (1 - Math.pow(1 - this.availability / 100, this.instance)) * Math.pow(100, this.instance - 1)
+    const instanceAvail = (1 - Math.pow(1 - this.availability / 100, this.instance)) * 100
 
     if (this.children.length === 0) return instanceAvail
     const importantChildrenAvailability: number[] = this.children

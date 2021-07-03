@@ -15,3 +15,7 @@ export const getSystem = createSelector(systemState, (testState: ReduxSystemStat
 export const getTraversePath = createSelector(systemState, (testState: ReduxSystemState): string[] => {
   return testState.traversePath
 })
+
+export const getSystemError = createSelector(systemState, (testState: ReduxSystemState): string => {
+  return testState.error
+})
