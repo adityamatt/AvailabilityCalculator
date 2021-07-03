@@ -59,7 +59,7 @@ export const AddChildModal = (props: IAddChildModal) => {
             </Stack.Item>
           </Stack>
         </Stack.Item>
-        <Stack.Item key="Body" verticalFill grow styles={{ root: { height: '60vh' } }}>
+        <Stack.Item key="Body" verticalFill grow styles={{ root: { minHeight: '60vh' } }}>
           <Stack tokens={globalStackTokensSmall}>
             <Stack.Item>
               <TextField
