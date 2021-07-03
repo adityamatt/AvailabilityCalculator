@@ -55,9 +55,9 @@ const iconSizeOptions: IDropdownOption[] = [
 export const Home = (props: IHome) => {
   const iconSize = useSelector(getIconSize)
   const error = useSelector(getSystemError)
+  const system = useSelector(getSystem)
 
   const dispatch = useDispatch()
-
   return (
     <Stack tokens={globalStackTokensXsmall} grow verticalFill>
       <Stack.Item id="ERROR MESSAGE">
@@ -84,10 +84,9 @@ export const Home = (props: IHome) => {
           </Stack.Item>
           <Stack.Item>
             <PrimaryButton
+              href={`data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(system.toJSON()))}`}
               iconProps={{ iconName: 'Download' }}
-              onClick={() => {
-                //TODO
-              }}
+              download="system.json"
               text="Download"
             />
           </Stack.Item>

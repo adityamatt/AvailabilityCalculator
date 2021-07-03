@@ -3,6 +3,14 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { getIconSize } from '../../store/selectors/systemSelector'
 import { deepClone } from '../common/util'
+export interface ISystemDesignJSON {
+  name: string
+  availability: number
+  isImportant: boolean
+  iconName?: string
+  instance: number
+  children: ISystemDesignJSON[]
+}
 
 export class SystemDesign {
   componentName: string
@@ -20,10 +28,17 @@ export class SystemDesign {
     this.instance = instance ? instance : 2
   }
 
-  toJson = () => {
-    //TODO
+  toJSON = (): ISystemDesignJSON => {
+    return {
+      name: this.componentName,
+      availability: this.availability,
+      isImportant: this.isImportant,
+      iconName: this.iconName,
+      instance: this.instance,
+      children: this.children.map((_design) => _design.toJSON()),
+    }
   }
-  fromJson = () => {
+  fromJSON = () => {
     //TODO
   }
 
