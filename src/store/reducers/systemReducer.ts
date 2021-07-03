@@ -1,6 +1,7 @@
 import { SystemDesign } from '../../components/types/SystemDesign'
 import {
   ADD_DESIGN_CHILD,
+  EDIT_DESIGN_COMPONENT,
   REMOVE_DESIGN_CHILDREN,
   RESET_SYSTEM_ERROR,
   REST_SYSTEM,
@@ -75,6 +76,24 @@ export default function systemReducer(state: ReduxSystemState = defaultSystemSta
         return {
           ...state,
           system: removeNewSystem,
+        }
+      } catch (err) {
+        return {
+          ...state,
+          error: err.toString(),
+        }
+      }
+    case EDIT_DESIGN_COMPONENT:
+      try {
+        const editNewSystem = state.system.clone()
+        editNewSystem.edit(action.design, action.path)
+        const path = [...state.traversePath]
+        path.pop()
+        path.push(action.design.componentName)
+        return {
+          ...state,
+          system: editNewSystem,
+          traversePath: path,
         }
       } catch (err) {
         return {

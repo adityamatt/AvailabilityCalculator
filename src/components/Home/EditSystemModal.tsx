@@ -1,49 +1,63 @@
-import { SystemDesign } from '../types/SystemDesign'
-import React from 'react'
 import {
-  Stack,
-  Modal,
-  Text,
-  IconButton,
-  PrimaryButton,
-  DefaultButton,
-  TextField,
-  SpinButton,
   Checkbox,
+  DefaultButton,
   ICheckboxProps,
+  IconButton,
+  Modal,
+  PrimaryButton,
+  SpinButton,
+  Stack,
+  Text,
+  TextField,
 } from '@fluentui/react'
 import { globalStackTokensLarge, globalStackTokensSmall, justifySpace } from '../globalStyles'
-import { getSystem } from '../../store/selectors/systemSelector'
+import React from 'react'
+import { SystemDesign } from '../types/SystemDesign'
 import { useSelector } from 'react-redux'
+import { getSystem } from '../../store/selectors/systemSelector'
 
-interface IAddChildModal {
+interface IEditSystemModal {
   isOpen: boolean
   close: () => void
-  onAdd: (design: SystemDesign) => void
+  designToEdit: SystemDesign
+  onEdit: (design: SystemDesign) => void
 }
-export const AddChildModal = (props: IAddChildModal) => {
+
+export const EditSystemModal = (props: IEditSystemModal) => {
   const systemDesign = useSelector(getSystem)
-  const [name, setName] = React.useState<string>('')
-  const [avail, setAvail] = React.useState<number>(99.99)
-  const [instance, setInstance] = React.useState<number>(1)
-  const [isImportant, setIsImportant] = React.useState<boolean>(false)
+  const [name, setName] = React.useState<string>(props.designToEdit.componentName)
+  const [avail, setAvail] = React.useState<number>(props.designToEdit.availability)
+  const [instance, setInstance] = React.useState<number>(props.designToEdit.instance)
+  const [isImportant, setIsImportant] = React.useState<boolean>(props.designToEdit.isImportant)
 
   const nameError = () => {
+    if (name === props.designToEdit.componentName) return ''
     if (name === '') return 'Name cannot be empty'
     if (!systemDesign.isNameUnique(name)) return 'Name must be unique, given name already exists for another dependency'
 
     return ''
   }
 
-  const disableAdd = (): boolean => {
-    if (nameError()) return true
+  const disableEdit = (): boolean => {
+    if (
+      name === props.designToEdit.componentName &&
+      avail === props.designToEdit.availability &&
+      instance === props.designToEdit.instance &&
+      isImportant === props.designToEdit.isImportant
+    )
+      return true
 
     return false
   }
 
-  const onAdd = () => {
-    const design = new SystemDesign(name, avail, isImportant, instance)
-    props.onAdd(design)
+  const onEdit = () => {
+    const output = props.designToEdit.clone()
+    output.componentName = name
+    output.instance = instance
+    output.availability = avail
+    output.isImportant = output.isImportant
+
+    props.onEdit(output)
     props.close()
   }
   return (
@@ -52,14 +66,14 @@ export const AddChildModal = (props: IAddChildModal) => {
         <Stack.Item key="Header">
           <Stack horizontal verticalAlign="center" styles={justifySpace}>
             <Stack.Item>
-              <Text variant="xLargePlus">Add Dependency</Text>
+              <Text variant="xLargePlus">Edit Component</Text>
             </Stack.Item>
             <Stack.Item>
               <IconButton iconProps={{ iconName: 'ChromeClose' }} onClick={props.close} />
             </Stack.Item>
           </Stack>
         </Stack.Item>
-        <Stack.Item key="Body" verticalFill grow styles={{ root: { minHeight: '60vh' } }}>
+        <Stack.Item key="Body" verticalFill grow styles={{ root: { minHeight: '60vh', minWidth: '50vw' } }}>
           <Stack tokens={globalStackTokensSmall}>
             <Stack.Item>
               <TextField
@@ -122,12 +136,12 @@ export const AddChildModal = (props: IAddChildModal) => {
           <Stack horizontal verticalAlign="center" styles={justifySpace}>
             <Stack.Item>
               <PrimaryButton
-                disabled={disableAdd()}
+                disabled={disableEdit()}
                 onClick={() => {
-                  onAdd()
+                  onEdit()
                 }}
               >
-                Add Dependency
+                Edit Component
               </PrimaryButton>
             </Stack.Item>
             <Stack.Item>

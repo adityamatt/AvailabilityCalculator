@@ -20,6 +20,7 @@ const createLabel = (system: SystemDesign): string => {
 export const RemoveChildModal = (props: IRemoveChildModal) => {
   const [removeChilds, setRemoveChilds] = React.useState<string[]>([])
   const disableAdd = (): boolean => {
+    if (removeChilds.length === 0) return true
     return false
   }
 

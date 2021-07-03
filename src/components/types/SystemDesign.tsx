@@ -49,7 +49,6 @@ export class SystemDesign {
     return this
   }
   removeChild = (removeNames: string[], path: string[]) => {
-    console.log(removeNames, path, this.componentName)
     if (path.length < 1) throw Error('Invalid system design architecture')
     if (path.length == 1 && path[0].toLowerCase() === this.componentName.toLowerCase()) {
       this.children = this.children.filter((valid) => {
@@ -63,6 +62,22 @@ export class SystemDesign {
 
     if (childIndex == -1) throw Error('Invalid traversal')
     this.children[childIndex].removeChild(removeNames, path.slice(1))
+  }
+  edit = (design: SystemDesign, path: string[]) => {
+    if (path.length < 1) throw Error('Invalid system design architecture')
+    if (path.length == 1 && path[0].toLowerCase() === this.componentName.toLowerCase()) {
+      this.availability = design.availability
+      this.isImportant = design.isImportant
+      this.componentName = design.componentName
+      this.instance = design.instance
+
+      return
+    }
+    if (path[0] !== this.componentName) throw Error('Invalid Traversal')
+    const childIndex = this.children.findIndex((component) => component.componentName === path[1])
+
+    if (childIndex == -1) throw Error('Invalid traversal')
+    this.children[childIndex].edit(design, path.slice(1))
   }
   clone = (): SystemDesign => {
     const output = new SystemDesign()
