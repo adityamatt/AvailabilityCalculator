@@ -71,6 +71,9 @@ export const SingleSystemIcon = (props: ISingleSystemIcon) => {
       </Stack.Item>
       <Stack.Item>
         <AddChildModal
+          onAdd={(design: SystemDesign) => {
+            //TODO
+          }}
           isOpen={isAddModalOpen}
           close={() => {
             setIsAddModalOpen(false)

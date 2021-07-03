@@ -1,6 +1,17 @@
 import { SystemDesign } from '../types/SystemDesign'
 import React from 'react'
-import { Stack, Modal, Text, IconButton, PrimaryButton, DefaultButton, TextField, SpinButton } from '@fluentui/react'
+import {
+  Stack,
+  Modal,
+  Text,
+  IconButton,
+  PrimaryButton,
+  DefaultButton,
+  TextField,
+  SpinButton,
+  Checkbox,
+  ICheckboxProps,
+} from '@fluentui/react'
 import { globalStackTokensLarge, globalStackTokensSmall, justifySpace } from '../globalStyles'
 import { getSystem } from '../../store/selectors/systemSelector'
 import { useSelector } from 'react-redux'
@@ -8,15 +19,18 @@ import { useSelector } from 'react-redux'
 interface IAddChildModal {
   isOpen: boolean
   close: () => void
+  onAdd: (design: SystemDesign) => void
 }
 export const AddChildModal = (props: IAddChildModal) => {
   const systemDesign = useSelector(getSystem)
   const [name, setName] = React.useState<string>('')
   const [avail, setAvail] = React.useState<number>(99.99)
   const [instance, setInstance] = React.useState<number>(1)
+  const [isImportant, setIsImportant] = React.useState<boolean>(false)
 
   const nameError = () => {
-    if (systemDesign.isNameUnique(name)) return 'Name must be unique, given name already exists for another dependency'
+    if (name === '') return 'Name cannot be empty'
+    if (!systemDesign.isNameUnique(name)) return 'Name must be unique, given name already exists for another dependency'
 
     return ''
   }
@@ -27,6 +41,11 @@ export const AddChildModal = (props: IAddChildModal) => {
     return false
   }
 
+  const onAdd = () => {
+    const design = new SystemDesign(name, avail, isImportant, instance)
+    props.onAdd(design)
+    props.close()
+  }
   return (
     <Modal isOpen={props.isOpen} onDismiss={props.close} isBlocking>
       <Stack tokens={globalStackTokensLarge} styles={{ root: { padding: 10 } }}>
@@ -80,7 +99,25 @@ export const AddChildModal = (props: IAddChildModal) => {
                 }}
               />
             </Stack.Item>
-            <Stack.Item></Stack.Item>
+            <Stack.Item>
+              <Checkbox
+                onRenderLabel={(props?: ICheckboxProps) => {
+                  //TODO
+                  return (
+                    <Text>
+                      Is this Dependency breaking ? i.e If this service is down, the system is down as well(common
+                      non-breaking dependecies are like Azure keyvaults)
+                    </Text>
+                  )
+                }}
+                onChange={(ev?: React.FormEvent<HTMLElement | HTMLInputElement>, checked?: boolean) => {
+                  //TODO
+                  if (checked) setIsImportant(true)
+                  else setIsImportant(false)
+                }}
+                checked={isImportant}
+              />
+            </Stack.Item>
           </Stack>
         </Stack.Item>
         <Stack.Item key="Footer">
@@ -89,7 +126,7 @@ export const AddChildModal = (props: IAddChildModal) => {
               <PrimaryButton
                 disabled={disableAdd()}
                 onClick={() => {
-                  //TODO
+                  onAdd()
                 }}
               >
                 Add Dependency
