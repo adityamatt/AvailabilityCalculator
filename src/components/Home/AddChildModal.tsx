@@ -11,16 +11,32 @@ import {
   SpinButton,
   Checkbox,
   ICheckboxProps,
+  ComboBox,
+  IComboBoxOption,
+  ISelectableOption,
+  IDropdownOption,
 } from '@fluentui/react'
 import { globalStackTokensLarge, globalStackTokensSmall, justifySpace } from '../globalStyles'
 import { getSystem } from '../../store/selectors/systemSelector'
 import { useSelector } from 'react-redux'
-
+import defaultSystem from '../common/defaultSystems'
 interface IAddChildModal {
   isOpen: boolean
   close: () => void
   onAdd: (design: SystemDesign) => void
 }
+
+const azureObject = defaultSystem.azure
+const comboBoxOptions: IComboBoxOption[] = [
+  ...azureObject.map((_system) => {
+    return {
+      key: _system.name,
+      text: _system.name,
+      data: { ..._system.icon },
+    }
+  }),
+]
+
 export const AddChildModal = (props: IAddChildModal) => {
   const systemDesign = useSelector(getSystem)
   const [name, setName] = React.useState<string>('')
@@ -115,6 +131,28 @@ export const AddChildModal = (props: IAddChildModal) => {
                 }}
                 checked={isImportant}
               />
+            </Stack.Item>
+            <Stack.Item>
+              {/* <ComboBox
+                options={comboBoxOptions}
+                placeholder="Choose a default system from Azure"
+                allowFreeform
+                useComboBoxAsMenuWidth
+                onRenderOption={(option?: IDropdownOption) => {
+                  if (!option) return null
+                  return (
+                    <Stack horizontal verticalAlign="center" tokens={globalStackTokensSmall}>
+                      <Stack.Item>{option.data}</Stack.Item>
+                      <Stack.Item>{option.text}</Stack.Item>
+                    </Stack>
+                  )
+                }}
+                styles={{
+                  optionsContainer: {
+                    maxHeight: '250px',
+                  },
+                }}
+              /> */}
             </Stack.Item>
           </Stack>
         </Stack.Item>
