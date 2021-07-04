@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getIconSize, getSystem, getSystemError, getTraversePath } from '../../store/selectors/systemSelector'
 import { resetError, resetSystem, updateIconSize } from '../../store/actions/systemActions'
 import { TraversePathHeader } from './TraversePathHeader'
+import { UploadFile } from './UploadFile'
 
 interface IHome {}
 
@@ -57,6 +58,7 @@ export const Home = (props: IHome) => {
   const error = useSelector(getSystemError)
   const system = useSelector(getSystem)
 
+  const inputFile = React.useRef(null)
   const dispatch = useDispatch()
   return (
     <Stack tokens={globalStackTokensXsmall} grow verticalFill>
@@ -89,6 +91,9 @@ export const Home = (props: IHome) => {
               download="system.json"
               text="Download"
             />
+          </Stack.Item>
+          <Stack.Item>
+            <UploadFile />
           </Stack.Item>
           <Stack.Item>
             <Stack horizontal tokens={globalStackTokensSmall}>

@@ -5,6 +5,8 @@ import {
   REMOVE_DESIGN_CHILDREN,
   RESET_SYSTEM_ERROR,
   REST_SYSTEM,
+  SET_ERROR,
+  SET_NEW_SYSTEM,
   UPDATE_ICON_SIZE,
   UPDATE_TRAVERSE_PATH,
 } from '../actions/actionTypes'
@@ -102,6 +104,17 @@ export default function systemReducer(state: ReduxSystemState = defaultSystemSta
         }
       }
 
+    case SET_ERROR:
+      const error: Error = action.error
+      return {
+        ...state,
+        error: error.message,
+      }
+    case SET_NEW_SYSTEM:
+      return {
+        ...state,
+        system: action.design,
+      }
     default:
       return state
   }

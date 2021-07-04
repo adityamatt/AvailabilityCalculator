@@ -3,6 +3,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { getIconSize } from '../../store/selectors/systemSelector'
 import { deepClone } from '../common/util'
+import Joi from 'joi'
 export interface ISystemDesignJSON {
   name: string
   availability: number
@@ -10,6 +11,49 @@ export interface ISystemDesignJSON {
   iconName?: string
   instance: number
   children: ISystemDesignJSON[]
+}
+
+export const JSONObjectSchema: Joi.ObjectSchema = Joi.object({
+  name: Joi.string().min(1),
+  availability: Joi.number().min(0.0).max(100.0),
+  isImportant: Joi.bool(),
+  iconName: Joi.string().optional(),
+  instance: Joi.number().integer().min(1),
+  children: Joi.array().items(Joi.link('#design')),
+}).id('design')
+
+const getNames = (design: ISystemDesignJSON): string[] => {
+  let childrenNames: string[] = []
+
+  if (!design.children) return []
+  design.children.forEach((child) => {
+    childrenNames = [...childrenNames, ...getNames(child)]
+  })
+  return [design.name, ...childrenNames]
+}
+
+function hasDuplicates(array: any[]) {
+  return new Set(array).size !== array.length
+}
+
+export const isValidJson = (json: any): string => {
+  try {
+    JSONObjectSchema.validate(json)
+
+    const names: string[] = getNames(json)
+
+    if (hasDuplicates(names)) return 'System has duplicate names'
+
+    return ''
+  } catch (err) {
+    return err.message
+  }
+}
+
+export const CreateSystemDesignFromJson = (object: ISystemDesignJSON): SystemDesign => {
+  const output = new SystemDesign(object.name, object.availability, object.isImportant, object.instance)
+  output.children = object.children.map((_itm) => CreateSystemDesignFromJson(_itm))
+  return output
 }
 
 export class SystemDesign {
@@ -38,8 +82,20 @@ export class SystemDesign {
       children: this.children.map((_design) => _design.toJSON()),
     }
   }
-  fromJSON = () => {
-    //TODO
+  fromJSON = (jsonObject: any) => {
+    try {
+      const output = isValidJson(jsonObject)
+      if (output) throw Error(output)
+
+      const copyFrom = CreateSystemDesignFromJson(jsonObject)
+      this.componentName = copyFrom.componentName
+      this.instance = copyFrom.instance
+      this.isImportant = copyFrom.isImportant
+      this.availability = copyFrom.availability
+      this.children = [...copyFrom.children]
+    } catch (err) {
+      throw Error('Invalid Json content')
+    }
   }
 
   renderIcon = () => {

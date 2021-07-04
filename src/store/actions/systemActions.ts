@@ -7,6 +7,8 @@ import {
   REST_SYSTEM,
   REMOVE_DESIGN_CHILDREN,
   EDIT_DESIGN_COMPONENT,
+  SET_ERROR,
+  SET_NEW_SYSTEM,
 } from './actionTypes'
 
 export const updateIconSize = (payload: number) => ({
@@ -26,6 +28,11 @@ export const resetSystem = () => ({
   type: REST_SYSTEM,
 })
 
+export const setSystemError = (error: Error) => ({
+  type: SET_ERROR,
+  error: error,
+})
+
 export const addDesignChild = (design: SystemDesign, traversePath: string[]) => ({
   type: ADD_DESIGN_CHILD,
   design: design,
@@ -42,4 +49,9 @@ export const editDesignComponent = (designToEdit: SystemDesign, traversePath: st
   type: EDIT_DESIGN_COMPONENT,
   design: designToEdit,
   path: traversePath,
+})
+
+export const setNewDesign = (design: SystemDesign) => ({
+  type: SET_NEW_SYSTEM,
+  design: design,
 })
